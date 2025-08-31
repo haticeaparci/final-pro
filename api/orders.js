@@ -13,40 +13,16 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
-    let body = req.body;
-    if (!body) {
-      const buffers = [];
-      for await (const chunk of req) {
-        buffers.push(chunk);
-      }
-      body = JSON.parse(Buffer.concat(buffers).toString());
-    }
-
-    const orderData = body.order;
+    const body = req.body;
+    const orderData = body?.order;
     if (!orderData || !orderData.items || orderData.items.length === 0) {
       return res.status(400).json({ message: "Missing data." });
     }
-
-    let orders = [];
-    try {
-      const fileData = await fs.readFile(ordersFile, "utf8");
-      orders = JSON.parse(fileData);
-    } catch (e) {
-      orders = [];
-    }
+    // Dosya işlemlerini kaldırdık
     const newOrder = { ...orderData, id: (Math.random() * 1000).toString() };
-    orders.push(newOrder);
-    await fs.writeFile(ordersFile, JSON.stringify(orders, null, 2));
-
     res.status(201).json({ message: "Order created!", order: newOrder });
   } else if (req.method === "GET") {
-    try {
-      const fileData = await fs.readFile(ordersFile, "utf8");
-      const orders = JSON.parse(fileData);
-      res.status(200).json(orders);
-    } catch (e) {
-      res.status(200).json([]);
-    }
+    res.status(200).json([]); // Her zaman boş dizi döner
   } else {
     res.status(405).json({ message: "Method not allowed" });
   }
