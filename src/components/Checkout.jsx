@@ -1,36 +1,43 @@
 import { useContext } from "react";
-import Modal from "./UI/Modal";
-import { currencyFormatter } from "../util/formatting";
-import InputCustom from "./UI/InputCustom";
-import ButtonCustom from "./UI/ButtonCustom";
-import CartContext from "../store/CartContext";
-import UserProgressContext from "../store/UserProgressContext";
-import useHttp from "../hooks/useHttp";
-import Error from "./Error";
+import Modal from "./UI/Modal.jsx";
+import { currencyFormatter } from "../util/formatting.js";
+import InputCustom from "./UI/InputCustom.jsx";
+import ButtonCustom from "./UI/ButtonCustom.jsx";
+import CartContext from "../store/CartContext.jsx";
+import UserProgressContext from "../store/UserProgressContext.jsx";
+import useHttp from "../hooks/useHttp.js";
+import Error from "./Error.jsx";
 
-const requestConfig = {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-};
-
+function getApiBaseUrl() {
+  try {
+    return eval("import.meta.env && import.meta.env.DEV")
+      ? "http://localhost:3000"
+      : "";
+  } catch {
+    return "";
+  }
+}
 export default function Checkout() {
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
 
+  const API_BASE_URL = getApiBaseUrl();
   const {
     data,
     isLoading: isSending,
     error,
     sendRequest,
     clearData,
-  } = useHttp("http://localhost:3000/orders", requestConfig);
+  } = useHttp(`${API_BASE_URL}/api/orders`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  });
 
   const cartTotal = cartCtx.items.reduce(
-    (totalPrice, item) => totalPrice + item.quantity * item.price,
+    (total, item) => total + item.price * item.quantity,
     0
   );
+
   function handleCloseCheckout() {
     userProgressCtx.hideCheckout();
   }
@@ -40,18 +47,15 @@ export default function Checkout() {
     cartCtx.clearCart();
     clearData();
   }
+
   function handleSubmitOrder(event) {
     event.preventDefault();
-
     const formData = new FormData(event.target);
     const customerData = Object.fromEntries(formData.entries());
-
+    // console.log("Form submitted");
     sendRequest(
       JSON.stringify({
-        order: {
-          items: cartCtx.items,
-          customer: customerData,
-        },
+        order: { items: cartCtx.items, customer: customerData },
       })
     );
   }
@@ -61,24 +65,25 @@ export default function Checkout() {
       <ButtonCustom type="button" textOnly onClick={handleCloseCheckout}>
         Close
       </ButtonCustom>
-      <ButtonCustom>Submit Order</ButtonCustom>
+      <ButtonCustom type="submit" data-testid="submit-order">
+        Submit Order
+      </ButtonCustom>
     </>
   );
-  if (isSending) {
-    actions = <span>Sending order ...</span>;
-  }
+
+  if (isSending) actions = <span>Sending order ...</span>;
+
   if (data && !error) {
     return (
       <Modal
         open={userProgressCtx.progress === "checkout"}
         onClose={handleFinish}
       >
-        <h2>Success!</h2>
-        <p>Your order was submitted successfully.</p>
-        <p>
-          We will get back to you with more details via email within the next
-          few minutes.
-        </p>
+        <div class="success-message">
+          <h2>Order Successful!</h2>
+          <p>🎉 Thank you! Your order was successful.</p>
+        </div>
+
         <p className="modal-actions">
           <ButtonCustom onClick={handleFinish}>Okay</ButtonCustom>
         </p>
@@ -93,16 +98,35 @@ export default function Checkout() {
     >
       <form onSubmit={handleSubmitOrder}>
         <h2>Checkout</h2>
-        <p>Total Amount:{currencyFormatter.format(cartTotal)}</p>
-        <InputCustom label="Full Name 🙍‍♀️" type="text" id="name" />
-        <InputCustom label="Email 📧" type="email" id="email" />
-        <InputCustom label="Address 🏠" type="text" id="street" />
+        <p>Total Amount: {currencyFormatter.format(cartTotal)}</p>
+        <InputCustom
+          label="Full Name"
+          type="text"
+          id="name"
+          data-testid="full-name"
+        />
+        <InputCustom
+          label="Email"
+          type="email"
+          id="email"
+          data-testid="email"
+        />
+        <InputCustom
+          label="Address"
+          type="text"
+          id="street"
+          data-testid="address"
+        />
         <div className="control-row">
-          <InputCustom label="Postal Code 📬" type="text" id="postal-code" />
-          <InputCustom label="City 🏙️" type="text" id="city" />
+          <InputCustom
+            label="Postal Code"
+            type="text"
+            id="postal-code"
+            data-testid="postal-code"
+          />
+          <InputCustom label="City" type="text" id="city" data-testid="city" />
         </div>
         {error && <Error title="Failed to submit order" message={error} />}
-
         <p className="modal-actions">{actions}</p>
       </form>
     </Modal>

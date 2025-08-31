@@ -48,7 +48,10 @@ export default function Cart() {
           Close
         </ButtonCustom>
         {cartCtx.items.length > 0 ? (
-          <ButtonCustom onClick={handleGoToCheckout}>
+          <ButtonCustom
+            onClick={handleGoToCheckout}
+            data-testid="go-to-checkout-btn"
+          >
             Go to Checkout
           </ButtonCustom>
         ) : null}

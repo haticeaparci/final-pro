@@ -34,6 +34,7 @@ export function UserProgressContextProvider({ children }) {
     showCheckout,
     hideCheckout,
   };
+  console.log("App.js progress:", userProgressCtx.progress);
 
   return (
     <UserProgressContext.Provider value={userProgressCtx}>

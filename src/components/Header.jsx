@@ -1,5 +1,5 @@
 import { useContext } from "react";
-
+import Logo from "./UI/Logo.jsx";
 import logoImg from "../assets/logo.jpg";
 import CartContext from "../store/CartContext.jsx";
 import UserProgressContext from "../store/UserProgressContext.jsx";
@@ -20,8 +20,9 @@ export default function Header() {
   return (
     <header id="main-header">
       <div id="title">
+        <Logo size={40} />
         <img src={logoImg} alt="A restaurant" />
-        <h1>ReactFood</h1>
+        <h1> SnackStack Order </h1>
       </div>
       <nav>
         <ButtonCustom textOnly onClick={handleShowCart}>

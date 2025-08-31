@@ -6,15 +6,23 @@ export default function Modal({ children, open, className = "", onClose }) {
 
   useEffect(() => {
     const modal = dialog.current;
+    if (!modal) return;
 
-    if (open) {
+    if (open && !modal.open) {
       modal.showModal();
     }
-    return () => modal.close();
+    if (!open && modal.open) {
+      modal.close();
+    }
   }, [open]);
 
   return createPortal(
-    <dialog ref={dialog} className={`modal ${className}`} onClose={onClose}>
+    <dialog
+      ref={dialog}
+      className={`modal ${className}`}
+      onClose={onClose}
+      data-testid="modal"
+    >
       {children}
     </dialog>,
     document.getElementById("modal")
