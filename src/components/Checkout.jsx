@@ -8,11 +8,18 @@ import UserProgressContext from "../store/UserProgressContext.jsx";
 import useHttp from "../hooks/useHttp.js";
 import Error from "./Error.jsx";
 
+// function getApiBaseUrl() {
+//   try {
+//     return eval("import.meta.env && import.meta.env.DEV")
+//       ? "http://localhost:3000"
+//       : "";
+//   } catch {
+//     return "";
+//   }
+// }
 function getApiBaseUrl() {
   try {
-    return eval("import.meta.env && import.meta.env.DEV")
-      ? "http://localhost:3000"
-      : "";
+    return import.meta.env.DEV ? "http://localhost:3000" : "";
   } catch {
     return "";
   }
