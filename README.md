@@ -43,4 +43,4 @@ Not just another React app — a from scratch, fully tested, serverless Food Ord
 
 ## 🎥 Demo
 
-  <img src="assets/demo.gif" width="600" alt="Demo GIF">
+![Demo](assets/demo.gif)
