@@ -43,6 +43,10 @@ Not just another React app — a from scratch, fully tested, serverless Food Ord
 
 ## 🎥 Demo
 
-<video src="assets/demo.webm" controls width="600">
-  Your browser does not support the video tag.
+## 🎥 Demo
+
+<video width="600" controls>
+  <source src="assets/demo.webm" type="video/webm">
+  <source src="assets/demo.mp4" type="video/mp4">
+  <img src="assets/demo.gif" width="600" alt="Demo GIF">
 </video>
