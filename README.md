@@ -43,4 +43,6 @@ Not just another React app — a from scratch, fully tested, serverless Food Ord
 
 ## 🎥 Demo
 
-![Demo](public/assets/demo.gif)
+<!-- ![Demo](public/assets/demo.gif) -->
+
+![Demo](public/assets/demo.webm)
