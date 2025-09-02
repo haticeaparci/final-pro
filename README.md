@@ -1,3 +1,9 @@
+![React](https://img.shields.io/badge/React-19+-blue?logo=react)
+![Vite](https://img.shields.io/badge/Vite-7+-pink?logo=vite)
+![Jest](https://img.shields.io/badge/Jest-UnitTests-red?logo=jest)
+![Cypress](https://img.shields.io/badge/Cypress-v15-brightgreen)
+![React Testing Library](https://img.shields.io/badge/RTL-ReactTestingLibrary-orange?logo=react)
+
 # 🍔 Food Order App
 
 A Food Ordering App built from scratch with modern React + Vite and a serverless architecture.  
